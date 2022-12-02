@@ -20,16 +20,18 @@ func main(){
 	}
 
 	for _, url := range urls{
-		checkURL(url)
+		result := checkURL(url)
+		fmt.Println(result.url, result.status)
 	}
 }
 
 func checkURL(url string) requestResult{
 	resp, err := http.Get(url)
+	status := "SUCCESS"
+
 	if(err != nil || resp.StatusCode >= 400){
-		fmt.Println(url, "FAILED")
-	} else {
-		fmt.Println(url, "SUCCESS")
-	}
-	return requestResult{}
+		status = "FAILED"
+	} 
+
+	return requestResult{url, status}
 }
