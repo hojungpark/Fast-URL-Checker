@@ -12,7 +12,7 @@ type requestResult struct{
 
 func main(){
 	c := make(chan requestResult)
-	// results := make(map[string]string)
+	results := make(map[string]string)
 	urls := []string{
 		"https://github.com/",
 		"https://reddit.com",
@@ -27,9 +27,12 @@ func main(){
 
 	for i := 0; i < len(urls); i++{
 		result := <- c
-		fmt.Println(result.url, result.status)
+		results[result.url] = result.status
 	}
 
+	for url, status := range results{
+		fmt.Println(url, status)
+	}
 }
 
 func checkURL(url string, c chan<- requestResult) {
