@@ -3,7 +3,6 @@ package main
 import (
 	"fmt"
 	"net/http"
-	"time"
 )
 
 type requestResult struct{
@@ -12,7 +11,8 @@ type requestResult struct{
 }
 
 func main(){
-	results := make(map[string]string)
+	c := make(chan requestResult)
+	// results := make(map[string]string)
 	urls := []string{
 		"https://github.com/",
 		"https://reddit.com",
@@ -22,17 +22,17 @@ func main(){
 	}
 
 	for _, url := range urls{
-		go checkURL(url)
+		go checkURL(url, c)
 	}
 
-	for url, status := range results{
-		fmt.Println(url, status)
+	for i := 0; i < len(urls); i++{
+		result := <- c
+		fmt.Println(result.url, result.status)
 	}
 
-	time.Sleep(time.Second*10)
 }
 
-func checkURL(url string) {
+func checkURL(url string, c chan<- requestResult) {
 	resp, err := http.Get(url)
 	status := "SUCCESS"
 
@@ -40,5 +40,5 @@ func checkURL(url string) {
 		status = "FAILED"
 	} 
 
-	fmt.Println(requestResult{url, status})
+	c <- requestResult{url, status}
 }
