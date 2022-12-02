@@ -21,5 +21,9 @@ func main(){
 
 func checkURL(url string){
 	resp, err := http.Get(url)
-	fmt.Println(resp.StatusCode, err)
+	if(err != nil || resp.StatusCode >= 400){
+		fmt.Println(url, "FAILED")
+	} else {
+		fmt.Println(url, "SUCCESS")
+	}
 }
