@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"net/http"
+	"time"
 )
 
 type requestResult struct{
@@ -21,16 +22,17 @@ func main(){
 	}
 
 	for _, url := range urls{
-		result := checkURL(url)
-		results[result.url] = result.status
+		go checkURL(url)
 	}
 
 	for url, status := range results{
 		fmt.Println(url, status)
 	}
+
+	time.Sleep(time.Second*10)
 }
 
-func checkURL(url string) requestResult{
+func checkURL(url string) {
 	resp, err := http.Get(url)
 	status := "SUCCESS"
 
@@ -38,5 +40,5 @@ func checkURL(url string) requestResult{
 		status = "FAILED"
 	} 
 
-	return requestResult{url, status}
+	fmt.Println(requestResult{url, status})
 }
