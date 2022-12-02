@@ -11,6 +11,7 @@ type requestResult struct{
 }
 
 func main(){
+	results := make(map[string]string)
 	urls := []string{
 		"https://github.com/",
 		"https://reddit.com",
@@ -21,7 +22,11 @@ func main(){
 
 	for _, url := range urls{
 		result := checkURL(url)
-		fmt.Println(result.url, result.status)
+		results[result.url] = result.status
+	}
+
+	for url, status := range results{
+		fmt.Println(url, status)
 	}
 }
 
