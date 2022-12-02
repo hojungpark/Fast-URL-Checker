@@ -5,6 +5,11 @@ import (
 	"net/http"
 )
 
+type requestResult struct{
+	url string
+	status string
+}
+
 func main(){
 	urls := []string{
 		"https://github.com/",
@@ -19,11 +24,12 @@ func main(){
 	}
 }
 
-func checkURL(url string){
+func checkURL(url string) requestResult{
 	resp, err := http.Get(url)
 	if(err != nil || resp.StatusCode >= 400){
 		fmt.Println(url, "FAILED")
 	} else {
 		fmt.Println(url, "SUCCESS")
 	}
+	return requestResult{}
 }
